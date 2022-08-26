@@ -1,7 +1,10 @@
 package com.example.restful.user;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -20,12 +23,26 @@ public class UserController {
 
     @GetMapping("/users/{id}")
     public User retrieveUser(@PathVariable int id){
-        return service.findOne(id);
+        User user = service.findOne(id);
+
+        if (user == null){
+            throw  new UserNotFoundException(String.format("ID[%S] not found" , id));
+        }
+
+        return user;
     }
 
     @PostMapping("/users")
-    public String createUser(@RequestBody User user) {
-        return service.save(user).getName();
+    public ResponseEntity<User> createUser(@RequestBody User user) {
+        User saveUser = service.save(user);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(saveUser.getId())
+                .toUri();
+
+
+
+        return ResponseEntity.created(location).build();
     }
 
 }
