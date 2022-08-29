@@ -1,5 +1,7 @@
 package com.example.restful.user;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -8,9 +10,15 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
+import java.util.Locale;
 
 @RestController
 public class UserController {
+
+
+
+    @Autowired //스프링이 가지고 있는 빈 들 중에서 같은 타입을 가지고 있는 빈을 자동으로 주입
+    private MessageSource messageSource;
 
     private UserDaoService service;
 
@@ -55,6 +63,12 @@ public class UserController {
             throw new UserNotFoundException(String.format("아이디 = [%s] 없다",id));
         }
 
+    }
+
+    @GetMapping("/helloworld-in")
+    public String helloInternational(@RequestHeader(name = "Accept-Language" ,required = false)Locale locale){ //헤더가(랭귀지) 설정되지 않으면 디폴트 랭귀지값으로 설정(main china)
+
+        return messageSource.getMessage("greeting.message",null,locale);
     }
 
 }
