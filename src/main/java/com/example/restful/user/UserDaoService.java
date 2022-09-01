@@ -15,9 +15,9 @@ public class UserDaoService {
     private static  int usersCount = 3;
 
     static {
-        users.add(new User(1,"sik",new Date()));
-        users.add(new User(2,"song",new Date()));
-        users.add(new User(3,"yoo",new Date()));
+        users.add(new User(1,"sik",new Date(),"pass1","123-456"));
+        users.add(new User(2,"song",new Date(),"pass2","789-789"));
+        users.add(new User(3,"yoo",new Date(),"pass3","999-999"));
     }
 
 
